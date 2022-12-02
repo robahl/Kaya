@@ -50,6 +50,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return rocket
     }()
     
+    private let rocketFire = SKEmitterNode(fileNamed: "FireParticleEffect.sks")!
+    
     private lazy var upperObstacle: SKShapeNode = {
         let size = CGSize(width: obstacleWidth, height: Int(self.size.height) / 2 - (gap / 2))
         let obstacle = SKShapeNode(rectOf: size)
@@ -96,6 +98,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(upperObstacle)
         addChild(lowerObstacle)
         
+        // Setup particle effects
+        rocket.addChild(rocketFire)
+        rocketFire.position.x -= 20
+        
         // Setup physics contact
         rocket.physicsBody?.contactTestBitMask = rocket.physicsBody!.collisionBitMask
         
@@ -141,7 +147,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         rocket.physicsBody?.angularVelocity = 0
         rocket.zRotation = 0
         let angle = atan2(rocket.physicsBody?.velocity.dy ?? 0, size.width / obstacleMoveDuration)
-        let rotateAction = SKAction.rotate(byAngle: angle, duration: 0.7)
+        let rotateAction = SKAction.rotate(byAngle: angle, duration: 0.6)
         rocket.run(rotateAction)
     }
     
